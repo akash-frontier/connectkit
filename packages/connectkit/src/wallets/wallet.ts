@@ -3,8 +3,8 @@ import { Chain } from 'wagmi';
 import { walletConnect } from './connectors/walletConnect';
 import { metaMask } from './connectors/metaMask';
 import { coinbaseWallet } from './connectors/coinbaseWallet';
-import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect';
-
+// import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect';
+import { WalletConnectLegacyConnector } from 'wagmi/connectors/walletConnectLegacy';
 export type WalletOptions = {
   chains: Chain[];
   appName?: string;
@@ -46,11 +46,11 @@ export const getDefaultConnectors = (chains: Chain[], appName: string) => {
 };
 
 export const getDefaultWalletConnectConnector = (chains: Chain[]) => {
-  return new WalletConnectConnector({
+  return new WalletConnectLegacyConnector({
     chains,
     options: {
       qrcode: false,
-      version: '1',
+      ...{ version: '1' },
     },
   });
 };

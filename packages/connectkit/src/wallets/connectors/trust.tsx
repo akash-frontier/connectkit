@@ -5,10 +5,13 @@ import {
   getProviderUri,
 } from './../wallet';
 
-import { isAndroid } from '../../utils';
+import { isAndroid, isMobile } from '../../utils';
 import Logos from './../../assets/logos';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export const trust = ({ chains }: WalletOptions): WalletProps => {
+  const isInstalled =
+    typeof window !== 'undefined' && window.ethereum?.isTrust === true;
   return {
     id: 'trust',
     name: 'Trust Wallet',
@@ -24,8 +27,14 @@ export const trust = ({ chains }: WalletOptions): WalletProps => {
         'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp',
       ios: 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409',
     },
+    installed: isInstalled,
     createConnector: () => {
-      const connector = getDefaultWalletConnectConnector(chains);
+      const connector = !isMobile()
+        ? new InjectedConnector({
+            chains,
+            options: { shimDisconnect: true },
+          })
+        : getDefaultWalletConnectConnector(chains);
 
       return {
         connector,

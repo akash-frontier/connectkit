@@ -7,8 +7,10 @@ import {
 
 import { isAndroid } from '../../utils';
 import Logos from './../../assets/logos';
-
+import { InjectedConnector } from 'wagmi/connectors/injected';
 export const frontier = ({ chains }: WalletOptions): WalletProps => {
+  const isInstalled =
+    typeof window !== 'undefined' && window.ethereum?.isFrontier === true;
   return {
     id: 'frontier',
     name: 'Frontier',
@@ -24,9 +26,13 @@ export const frontier = ({ chains }: WalletOptions): WalletProps => {
         'https://play.google.com/store/apps/details?id=com.frontierwallet',
       website: 'https://frontier.xyz/',
     },
+    installed: isInstalled,
     createConnector: () => {
-      const connector = getDefaultWalletConnectConnector(chains);
-
+      // const connector = getDefaultWalletConnectConnector(chains);
+      const connector = new InjectedConnector({
+        chains,
+        options: { shimDisconnect: true },
+      });
       return {
         connector,
         mobile: {

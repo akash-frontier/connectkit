@@ -245,7 +245,7 @@ const Wallets: React.FC = () => {
               }
 
               if (info.id === 'injected') {
-                if (!shouldShowInjectedConnector()) return null;
+                // if (!shouldShowInjectedConnector()) return null;
 
                 const foundInjector = findInjectedConnectorInfo(connector.name);
                 if (foundInjector) {
